@@ -1,6 +1,6 @@
 // core/utils/validators.dart
 
-class Validators {
+abstract class Validators {
   Validators._();
 
   // =========================
