@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/features/splash/presentation/widgets/splash_page_body.dart';
 
 class SplashPage extends StatelessWidget {
-  const new({super.key}); 
+  const SplashPage({super.key}); 
 
   static const String routerName = '/splashPage' ;
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return  Scaffold(
+      body: SplashPageBody() ,
+    ) ;
   }
 }
