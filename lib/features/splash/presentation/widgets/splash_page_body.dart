@@ -46,7 +46,8 @@ class _SplashPageBodyState extends State<SplashPageBody>
   }
 
   @override
-  void dispose() {
+  void dispose
+  () {
     _animationController.dispose(); // تنظيف المحرك للأنيميشن عند إغلاق الصفحة
     super.dispose();
   }

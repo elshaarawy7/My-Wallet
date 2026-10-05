@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/core/router/app_router.dart';
+import 'package:my_wallet/core/server/getit_server.dart';
 
-void main() {
+void main() {  
+
+  WidgetsFlutterBinding.ensureInitialized(); 
+  setupServer();
   runApp(const MyWallet());
 }
 
@@ -17,7 +21,10 @@ class MyWallet extends StatelessWidget {
       builder: (context, child){
          return Directionality(
            textDirection: TextDirection.rtl,
-           child: child!,
+           child: Material(
+             color: Colors.transparent,
+             child: child!,
+           ),
          );
     },);
   }
