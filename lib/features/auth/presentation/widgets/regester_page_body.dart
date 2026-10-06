@@ -234,7 +234,7 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
                   Gap(10),
 
                   // ===== زر جوجل =====
-                  GoogleButton(onPressed: () {}),
+                  GoogleButton(),
 
                   Gap(20),
 

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:my_wallet/core/errors/fuiler.dart';
 import 'package:my_wallet/features/auth/data/models/login_model.dart';
+import 'package:my_wallet/features/auth/data/models/login_response_model.dart';
 import 'package:my_wallet/features/auth/data/models/regester_model.dart';
 
 abstract class AuthRepo {
@@ -16,4 +17,9 @@ abstract class AuthRepo {
     required String password , 
     required String confirmPassword , 
   }); 
+
+  
+  Future<Either<Failure, LoginResponseModel>> googleAuth({
+    required String idToken,  
+  });  
 }

@@ -9,6 +9,9 @@ import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/core/utils/app_images.dart';
 import 'package:my_wallet/core/utils/validators.dart';
 import 'package:my_wallet/core/widgets/custom_batton.dart';
+import 'package:my_wallet/features/auth/data/datasources/datasources_auth_imple.dart';
+import 'package:my_wallet/features/auth/data/repositories/auth_repo_imple.dart';
+import 'package:my_wallet/features/auth/presentation/cubit/google/googole_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_state.dart';
 import 'package:my_wallet/features/auth/presentation/widgets/custem_text_from_filed.dart';
@@ -216,9 +219,10 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                       ],
                     ),
 
-                    Gap(10),
+                    Gap(10), 
 
-                    GoogleButton(onPressed: () {}),
+                    GoogleButton(),
+                   
 
                     Gap(10),
 

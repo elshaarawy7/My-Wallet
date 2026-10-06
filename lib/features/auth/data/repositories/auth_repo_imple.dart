@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:my_wallet/core/errors/fuiler.dart';
 import 'package:my_wallet/features/auth/data/models/login_model.dart';
+import 'package:my_wallet/features/auth/data/models/login_response_model.dart';
 import 'package:my_wallet/features/auth/data/models/regester_model.dart';
 import 'package:my_wallet/features/auth/domain/repositories/auth_repo.dart';
 import 'package:my_wallet/features/auth/data/datasources/datasources_auth_imple.dart';
@@ -31,5 +32,14 @@ class AuthRepoImple implements AuthRepo {
       password: password,
       confirmPassword: confirmPassword,
     );
+  }
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> googleAuth({
+    required String idToken,
+  }) {
+    return datasourcesAuthImple.googleAuth(idToken: idToken); 
+     
+
   }
 }

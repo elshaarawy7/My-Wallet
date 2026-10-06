@@ -5,10 +5,12 @@ import 'package:my_wallet/features/auth/presentation/pages/foreget_passowrd_page
 import 'package:my_wallet/features/auth/presentation/pages/verify_account_page.dart';
 import 'package:my_wallet/features/home/presentation/pages/home_page.dart';
 import 'package:my_wallet/features/splash/presentation/pages/splash_page.dart';
+import 'package:my_wallet/rote.dart';
 
-class AppRouter { 
+class AppRouter {  
 
-
+  // rote 
+  static const String rotePage = '/rotePage' ;  
   // auth 
   static const String splashPage = '/splashPage' ; 
   static const String loginPage = '/loginPage' ;
@@ -21,8 +23,13 @@ class AppRouter {
   static const String homePage = '/homePage' ;
 
   static final  GoRouter router = GoRouter( 
-    initialLocation: splashPage, 
-    routes: [ 
+    initialLocation: rotePage, 
+    routes: [  
+
+      GoRoute(
+        path: rotePage , 
+         builder: (context, state) => RotePage() ,
+      ) ,  
 
       GoRoute(
         path: splashPage , 
