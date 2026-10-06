@@ -1,8 +1,10 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_wallet/core/router/app_router.dart';
 import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/features/home/presentation/pages/home_page.dart';
-import 'package:my_wallet/features/transactions/presentation/pages/transactions_page.dart';
+import 'package:my_wallet/features/transactions/widgets/transactions_page.dart';
 
 class RotePage extends StatefulWidget {
   const RotePage({super.key});
@@ -32,7 +34,9 @@ class _RotePageState extends State<RotePage> {
         backgroundColor: AppColors.infoColor,
         elevation: 4,
         shape: const CircleBorder(),
-        onPressed: () {},
+        onPressed: () {
+          context.push(AppRouter.addTransactionPage);
+        },
         child: const Icon(Icons.add, size: 30, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

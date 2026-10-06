@@ -3,66 +3,53 @@ import 'package:my_wallet/features/auth/presentation/pages/login_page.dart';
 import 'package:my_wallet/features/auth/presentation/pages/regester_page.dart';
 import 'package:my_wallet/features/auth/presentation/pages/foreget_passowrd_page.dart';
 import 'package:my_wallet/features/auth/presentation/pages/verify_account_page.dart';
+import 'package:my_wallet/features/transactions/presentation/pages/add_transaction_page.dart';
 import 'package:my_wallet/features/home/presentation/pages/home_page.dart';
 import 'package:my_wallet/features/splash/presentation/pages/splash_page.dart';
 import 'package:my_wallet/rote.dart';
 
-class AppRouter {  
+class AppRouter {
+  // rote
+  static const String rotePage = '/rotePage';
+  // auth
+  static const String splashPage = '/splashPage';
+  static const String loginPage = '/loginPage';
+  static const String regesterPage = '/regesterPage';
+  static const String forgetPassowrdPage = '/forgetPassowrdPage';
+  static const String verifyAccountPage = '/verifyAccountPage';
 
-  // rote 
-  static const String rotePage = '/rotePage' ;  
-  // auth 
-  static const String splashPage = '/splashPage' ; 
-  static const String loginPage = '/loginPage' ;
-  static const String regesterPage = '/regesterPage' ; 
-  static const String forgetPassowrdPage = '/forgetPassowrdPage' ; 
-  static const String verifyAccountPage = '/verifyAccountPage' ; 
+  // home
 
-  // home  
+  static const String homePage = '/homePage';
+  static const String addTransactionPage = '/addTransactionPage';
 
-  static const String homePage = '/homePage' ;
+  static final GoRouter router = GoRouter(
+    initialLocation: rotePage,
+    routes: [
+      GoRoute(path: rotePage, builder: (context, state) => RotePage()),
 
-  static final  GoRouter router = GoRouter( 
-    initialLocation: rotePage, 
-    routes: [  
+      GoRoute(path: splashPage, builder: (context, state) => SplashPage()),
 
-      GoRoute(
-        path: rotePage , 
-         builder: (context, state) => RotePage() ,
-      ) ,  
+      GoRoute(path: loginPage, builder: (context, state) => LoginPage()),
 
-      GoRoute(
-        path: splashPage , 
-         builder: (context, state) => SplashPage() ,
-      ) ,  
+      GoRoute(path: regesterPage, builder: (context, state) => RegesterPage()),
 
-      GoRoute(
-        path: loginPage , 
-         builder: (context, state) => LoginPage() ,
-      ) ,  
+      GoRoute(path: homePage, builder: (context, state) => HomePage()),
 
       GoRoute(
-        path: regesterPage , 
-         builder: (context, state) => RegesterPage() ,
-      ) ,  
-
-       GoRoute(
-        path: homePage , 
-         builder: (context, state) => HomePage() ,
-      ) ,   
+        path: forgetPassowrdPage,
+        builder: (context, state) => ForegetPassowrdPage(),
+      ),
 
       GoRoute(
-        path: forgetPassowrdPage , 
-         builder: (context, state) => ForegetPassowrdPage() ,
-      ) ,    
+        path: verifyAccountPage,
+        builder: (context, state) => VerifyAccountPage(),
+      ),
 
       GoRoute(
-        path: verifyAccountPage , 
-         builder: (context, state) => VerifyAccountPage() ,
-      ) ,    
-
-      
-
-    ]
+        path: addTransactionPage,
+        builder: (context, state) => AddTransactionPage(),
+      ),
+    ],
   );
 }

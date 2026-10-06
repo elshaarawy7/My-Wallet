@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/features/home/presentation/widgets/balance_cart.dart';
+import 'package:my_wallet/features/home/presentation/widgets/monthly_calendar_card.dart';
+import 'package:my_wallet/features/home/presentation/widgets/monthly_spacing_rate_card.dart';
 
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
@@ -13,7 +15,7 @@ class HomePageBody extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(child: Gap(75)),
+            SliverGap(50),
 
             SliverToBoxAdapter(
               child: Text(
@@ -26,8 +28,6 @@ class HomePageBody extends StatelessWidget {
               ),
             ),
 
-            SliverToBoxAdapter(child: Gap(10)),
-
             SliverToBoxAdapter(
               child: Text(
                 "الدورة المالية الحالية لـ أكتوبر ٢٠٢٦",
@@ -39,9 +39,22 @@ class HomePageBody extends StatelessWidget {
               ),
             ),
 
-            Gap(20),
+            SliverToBoxAdapter(
+              child: MonthlyCalendarCard(
+                transactionDates: [
+                  DateTime(2026, 10, 2),
+                  DateTime(2026, 10, 3),
+                  DateTime(2026, 10, 6),
+                ],
+              ),
+            ),
+
+            SliverGap(10),
 
             SliverToBoxAdapter(child: AccountBalanceCard()),
+            SliverGap(10),
+            SliverToBoxAdapter(child: MonthlySpendingRateCard()),
+            SliverGap(10),
           ],
         ),
       ),

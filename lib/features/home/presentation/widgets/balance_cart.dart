@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-class AccountBalanceCard extends StatelessWidget {
+class AccountBalanceCard extends StatefulWidget {
   const AccountBalanceCard({Key? key}) : super(key: key);
 
+  @override
+  State<AccountBalanceCard> createState() => _AccountBalanceCardState();
+}
+
+class _AccountBalanceCardState extends State<AccountBalanceCard> {
+  bool isHidden = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,10 +27,7 @@ class AccountBalanceCard extends StatelessWidget {
           ],
         ),
         // حدود ناعمة ومضيئة قليلاً لإعطاء عمق
-        border: Border.all(
-          color: Colors.white.withOpacity(0.08),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.08), width: 1),
         // الظل الخارجي للكارت
         boxShadow: [
           BoxShadow(
@@ -41,30 +45,27 @@ class AccountBalanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // زر إخفاء
-              InkWell(
-                onTap: () {
-                  // Action عند الضغط على إخفاء
-                },
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Row(
-                    children: const [
-                      Icon(
-                        Icons.remove_red_eye_outlined,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isHidden = !isHidden;
+                        });
+                      },
+                      icon: Icon(
+                        isHidden ? Icons.visibility : Icons.visibility_off,
                         color: Colors.grey,
                         size: 18,
                       ),
-                      SizedBox(width: 6),
-                      Text(
-                        'إخفاء',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Text(
+                      isHidden ? 'إخفاء' : 'إظهار',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                  ],
                 ),
               ),
               // الرصيد المتاح مع النقطة الملونة
@@ -91,14 +92,14 @@ class AccountBalanceCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          Gap(10),
 
           // قيمة الرصيد الأساسي
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
-            children: const [
+            children: [
               Text(
                 'ج.م',
                 style: TextStyle(
@@ -109,7 +110,7 @@ class AccountBalanceCard extends StatelessWidget {
               ),
               SizedBox(width: 8),
               Text(
-                '١٢,٤٥٠',
+                isHidden ? '********' : '١٢,٤٥٠',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 36,
@@ -119,7 +120,7 @@ class AccountBalanceCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 30),
+          Gap(10),
 
           // القسم السفلي (إجمالي الدخل / إجمالي المصروفات)
           Row(
@@ -132,13 +133,9 @@ class AccountBalanceCard extends StatelessWidget {
                 icon: Icons.arrow_upward,
                 color: const Color(0xFFEF5350), // أحمر
               ),
-              
+
               // خط فاصل بين القسمين
-              Container(
-                height: 40,
-                width: 1,
-                color: Colors.white10,
-              ),
+              Container(height: 40, width: 1, color: Colors.white10),
 
               // إجمالي الدخل
               _buildSubStat(
@@ -166,18 +163,11 @@ class AccountBalanceCard extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: 16,
-            ),
+            Icon(icon, color: color, size: 16),
             const SizedBox(width: 4),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 13,
-              ),
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
           ],
         ),
@@ -187,10 +177,7 @@ class AccountBalanceCard extends StatelessWidget {
           children: [
             const Text(
               'ج.م',
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 12,
-              ),
+              style: TextStyle(color: Colors.white54, fontSize: 12),
             ),
             const SizedBox(width: 4),
             Text(
