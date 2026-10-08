@@ -14,7 +14,7 @@ import 'package:my_wallet/features/auth/data/repositories/auth_repo_imple.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/google/googole_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_state.dart';
-import 'package:my_wallet/features/auth/presentation/widgets/custem_text_from_filed.dart';
+import 'package:my_wallet/core/widgets/custem_text_from_filed.dart';
 import 'package:my_wallet/features/auth/presentation/widgets/google_batton.dart';
 import 'package:my_wallet/features/auth/presentation/widgets/no_acount.dart';
 
@@ -62,7 +62,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             toastDuration: Duration(seconds: 2),
           ).show(context);
 
-          context.go(AppRouter.homePage);
+          context.go(AppRouter.rotePage);
         }
       },
       builder: (context, state) {

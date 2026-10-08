@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_wallet/core/router/app_router.dart';
 import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/features/home/presentation/pages/home_page.dart';
-import 'package:my_wallet/features/transactions/widgets/transactions_page.dart';
+import 'package:my_wallet/features/transactions/presentation/pages/transaction_page.dart';
 
 class RotePage extends StatefulWidget {
   const RotePage({super.key});
@@ -24,7 +24,7 @@ class _RotePageState extends State<RotePage> {
     {'icon': Icons.swap_horiz_rounded, 'label': 'المعاملات'},
   ];
 
-  final List<Widget> pages = [const HomePage(), const TransactionsPage()];
+  final List<Widget> pages = [const HomePage(), const TransactionPage()];
 
   @override
   Widget build(BuildContext context) {

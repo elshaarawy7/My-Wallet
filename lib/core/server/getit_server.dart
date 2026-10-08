@@ -8,6 +8,12 @@ import 'package:my_wallet/features/auth/domain/repositories/auth_repo.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/google/googole_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/regester/regester_cubit.dart';
+import 'package:my_wallet/features/transactions/data/datasources/transaction_datasource_imple.dart';
+import 'package:my_wallet/features/transactions/data/repositories/transactions_repo_imple.dart';
+import 'package:my_wallet/features/transactions/domain/entity/usecase/transaction_usecase.dart';
+import 'package:my_wallet/features/transactions/domain/repositories/transactions_repo.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/transaction_cubit.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/categories_cubit.dart';
 
 final gitIt = GetIt.instance;
 
@@ -32,4 +38,30 @@ void setupServer() {
   gitIt.registerLazySingleton<GoogoleCubit>(
     () => GoogoleCubit(gitIt<AuthRepo>()),
   );
+
+  // Transactions
+  gitIt.registerLazySingleton<TransactionRepository>(
+    () => TransactionRepositoryImpl(
+      remoteDataSource: gitIt<TransactionRemoteDataSourceImpl>(),
+    ),
+  );
+
+  gitIt.registerLazySingleton<CreateTransactionUseCase>(
+    () => CreateTransactionUseCase(gitIt<TransactionRepository>()),
+  );
+
+  gitIt.registerLazySingleton<AddTransactionCubit>(
+    () => AddTransactionCubit(gitIt<CreateTransactionUseCase>()),
+  );
+
+  gitIt.registerFactory<CategoriesCubit>(
+    () => CategoriesCubit(gitIt<CreateTransactionUseCase>()),
+  );
+
+
+  gitIt.registerLazySingleton<TransactionRemoteDataSourceImpl>(
+    () => TransactionRemoteDataSourceImpl(dio: gitIt<Dio>()),
+  ); 
+
+  
 }

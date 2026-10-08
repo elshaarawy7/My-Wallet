@@ -46,6 +46,7 @@ dependencies:
   pinput: ^7.0.0
   google_sign_in: ^7.2.0
   animated_bottom_navigation_bar: ^1.4.1
+  fluttertoast: ^10.0.2
 
 dev_dependencies:
   flutter_test:

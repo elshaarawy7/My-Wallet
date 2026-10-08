@@ -1,11 +1,11 @@
 import 'package:go_router/go_router.dart';
+import 'package:my_wallet/features/auth/presentation/pages/foreget_passowrd_page.dart';
 import 'package:my_wallet/features/auth/presentation/pages/login_page.dart';
 import 'package:my_wallet/features/auth/presentation/pages/regester_page.dart';
-import 'package:my_wallet/features/auth/presentation/pages/foreget_passowrd_page.dart';
 import 'package:my_wallet/features/auth/presentation/pages/verify_account_page.dart';
-import 'package:my_wallet/features/transactions/presentation/pages/add_transaction_page.dart';
 import 'package:my_wallet/features/home/presentation/pages/home_page.dart';
 import 'package:my_wallet/features/splash/presentation/pages/splash_page.dart';
+import 'package:my_wallet/features/transactions/presentation/pages/add_transaction_page.dart';
 import 'package:my_wallet/rote.dart';
 
 class AppRouter {

@@ -11,7 +11,7 @@ import 'package:my_wallet/core/utils/validators.dart';
 import 'package:my_wallet/core/widgets/custom_batton.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/regester/regester_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/regester/regester_state.dart';
-import 'package:my_wallet/features/auth/presentation/widgets/custem_text_from_filed.dart';
+import 'package:my_wallet/core/widgets/custem_text_from_filed.dart';
 import 'package:my_wallet/features/auth/presentation/widgets/google_batton.dart';
 
 class RegisterPageBody extends StatefulWidget {
@@ -36,7 +36,7 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
             toastPosition: Position.bottom,
             toastDuration: Duration(seconds: 2),
           ).show(context);
-          context.go(AppRouter.homePage);
+          context.go(AppRouter.rotePage);
         }
 
         if (state is RegesterErorr) {

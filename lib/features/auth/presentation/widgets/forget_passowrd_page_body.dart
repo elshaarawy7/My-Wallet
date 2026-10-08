@@ -5,7 +5,7 @@ import 'package:my_wallet/core/router/app_router.dart';
 import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/core/utils/validators.dart';
 import 'package:my_wallet/core/widgets/custom_batton.dart';
-import 'package:my_wallet/features/auth/presentation/widgets/custem_text_from_filed.dart';
+import 'package:my_wallet/core/widgets/custem_text_from_filed.dart';
 
 class ForgetPassowrdPageBody extends StatefulWidget {
   const ForgetPassowrdPageBody({super.key});

@@ -1,19 +1,66 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_wallet/core/constants/api_constants.dart';
 import 'package:my_wallet/core/errors/fuiler.dart';
+import 'package:my_wallet/features/auth/data/datasources/datasources_auhe.dart';
 import 'package:my_wallet/features/auth/data/models/login_model.dart';
 import 'package:my_wallet/features/auth/data/models/login_response_model.dart';
 import 'package:my_wallet/features/auth/data/models/regester_model.dart';
-import 'package:my_wallet/features/auth/data/datasources/datasources_auhe.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class DatasourcesAuthImple implements DatasourcesAuhe {
   final Dio dio;
   final GoogleSignIn googleSignIn;
 
   DatasourcesAuthImple(this.dio, this.googleSignIn);
+
+  /// Keeps the token on the shared Dio instance used by the authenticated
+  /// features (including transactions).
+  ///
+  /// The API wraps its payload in `data` in some responses, while other
+  /// responses expose it at the top level, so support both shapes here.
+  void _applyAccessToken(Map<String, dynamic> response) {
+    final payload = response['data'] is Map
+        ? Map<String, dynamic>.from(response['data'] as Map)
+        : response;
+    final token = payload['accessToken'] ?? payload['access_token'];
+
+    if (token is String && token.trim().isNotEmpty) {
+      final accessToken = token.trim();
+      dio.options.headers['Authorization'] =
+          accessToken.toLowerCase().startsWith('bearer ')
+          ? accessToken
+          : 'Bearer $accessToken';
+    }
+  }
+
+  void _applyBearerAuthorization(Map<String, dynamic> response) {
+    final payload = response['data'] is Map
+        ? Map<String, dynamic>.from(response['data'] as Map)
+        : response;
+    final token = payload['accessToken'] ?? payload['access_token'];
+    if (token is String && token.trim().isNotEmpty) {
+      final accessToken = token.trim();
+      dio.options.headers['Authorization'] =
+          accessToken.toLowerCase().startsWith('bearer ')
+          ? accessToken
+          : 'Bearer $accessToken';
+    }
+  }
+
+  void _setAuthorizationFromResponse(Map<String, dynamic> response) {
+    final payload = response['data'] is Map
+        ? Map<String, dynamic>.from(response['data'] as Map)
+        : response;
+    final token = payload['accessToken'] ?? payload['access_token'];
+    if (token is String && token.trim().isNotEmpty) {
+      final value = token.trim();
+      dio.options.headers['Authorization'] =
+          value.toLowerCase().startsWith('bearer ')
+          ? value
+          : <String>['Bearer ', value].join();
+    }
+  }
 
   String _translateErrorMessage(String rawMessage) {
     final lower = rawMessage.toLowerCase().trim();
@@ -88,6 +135,9 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
       final userData = data['data'] is Map<String, dynamic>
           ? data['data'] as Map<String, dynamic>
           : data;
+      _applyAccessToken(data);
+      _applyBearerAuthorization(data);
+      _setAuthorizationFromResponse(data);
       return right(LoginModel.fromJson(userData));
     } catch (e) {
       if (e is DioException) {
@@ -124,6 +174,9 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
       final userData = data['data'] is Map<String, dynamic>
           ? data['data'] as Map<String, dynamic>
           : data;
+      _applyAccessToken(data);
+      _applyBearerAuthorization(data);
+      _setAuthorizationFromResponse(data);
       return right(RegesterModel.fromJson(userData));
     } catch (e) {
       if (e is DioException) {
@@ -171,12 +224,17 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
 
       final data = res.data as Map<String, dynamic>;
 
-      // DEBUG: print full response to see structure
-      debugPrint('=== Google Auth Response ===');
-      debugPrint(data.toString());
-      debugPrint('===========================');
-
-      return right(LoginResponseModel.fromJson(data));
+      final loginResponse = LoginResponseModel.fromJson(data);
+      if (loginResponse.accessToken.isNotEmpty) {
+        final accessToken = loginResponse.accessToken.trim();
+        dio.options.headers['Authorization'] =
+            accessToken.toLowerCase().startsWith('bearer ')
+            ? accessToken
+            : 'Bearer $accessToken';
+      }
+      _applyBearerAuthorization(data);
+      _setAuthorizationFromResponse(data);
+      return right(loginResponse);
     } catch (e) {
       if (e is DioException) {
         return left(ServerFailure(message: _extractErrorMessage(e)));

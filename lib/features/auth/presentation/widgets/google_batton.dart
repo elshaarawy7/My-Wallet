@@ -11,33 +11,27 @@ import 'package:my_wallet/features/auth/presentation/cubit/google/googole_cubit.
 import 'package:my_wallet/features/auth/presentation/cubit/google/googole_state.dart';
 
 class GoogleButton extends StatelessWidget {
-
   const GoogleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GoogoleCubit, GoogoleState>(
-      listener: (context, state) {  
-
-         if (state is GoogleAuthError) {
+      listener: (context, state) {
+        if (state is GoogleAuthError) {
           CherryToast.error(
             title: const Text("خطأ", style: TextStyle(color: Colors.white)),
-            description: Text(
-              state.message ,
-              selectionColor: Colors.white,
-            ),
+            description: Text(state.message, selectionColor: Colors.white),
             backgroundColor: AppColors.errorColor,
             toastPosition: Position.bottom,
             toastDuration: Duration(seconds: 2),
           ).show(context);
-        } 
+        }
 
-         if (state is GoogleAuthSucsess) {
+        if (state is GoogleAuthSucsess) {
           CherryToast.success(
             title: const Text(
               "تم بنجاح",
-              style: TextStyle(color: Colors.white), 
-              
+              style: TextStyle(color: Colors.white),
             ),
             description: const Text(
               "تم تسجيل الدخول بنجاح",
@@ -47,49 +41,47 @@ class GoogleButton extends StatelessWidget {
             toastPosition: Position.bottom,
             toastDuration: Duration(seconds: 2),
           ).show(context);
-          context.go(AppRouter.homePage);
+          context.go(AppRouter.rotePage);
         }
-        
       },
-      builder: (context, state) { 
+      builder: (context, state) {
+        final cubit = GoogoleCubit.get(context);
 
-         final cubit = GoogoleCubit.get(context) ; 
-         
-      return SizedBox(
-        width: double.infinity,
-        height: 56,
-        child: OutlinedButton(
-          onPressed: state is GoogleAuthLoading
-              ? null
-              : () {
-                  cubit.googleAuth(idToken: '');
-                },
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.white,
-            side: const BorderSide(color: AppColors.borderColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+        return SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: OutlinedButton(
+            onPressed: state is GoogleAuthLoading
+                ? null
+                : () {
+                    cubit.googleAuth(idToken: '');
+                  },
+            style: OutlinedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: const BorderSide(color: AppColors.borderColor),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(AppImages.googleIcon, width: 24, height: 24),
+
+                const Gap(8),
+                const Text(
+                  'المتابعة باستخدام Google',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(AppImages.googleIcon, width: 24, height: 24),
-      
-              const Gap(8),
-              const Text(
-                'المتابعة باستخدام Google',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-      }
+        );
+      },
     );
   }
 }
