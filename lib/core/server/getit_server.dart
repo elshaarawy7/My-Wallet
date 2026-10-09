@@ -10,10 +10,14 @@ import 'package:my_wallet/features/auth/presentation/cubit/login/login_cubit.dar
 import 'package:my_wallet/features/auth/presentation/cubit/regester/regester_cubit.dart';
 import 'package:my_wallet/features/transactions/data/datasources/transaction_datasource_imple.dart';
 import 'package:my_wallet/features/transactions/data/repositories/transactions_repo_imple.dart';
-import 'package:my_wallet/features/transactions/domain/entity/usecase/transaction_usecase.dart';
 import 'package:my_wallet/features/transactions/domain/repositories/transactions_repo.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/transaction_cubit.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/categories_cubit.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/get_transaction_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/get_transactions_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/delete_transaction_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/transaction_usecase.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/catogogry/categories_cubit.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/get_transaction/get_transaction_cubit.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/transaction/transaction_cubit.dart';
 
 final gitIt = GetIt.instance;
 
@@ -50,7 +54,7 @@ void setupServer() {
     () => CreateTransactionUseCase(gitIt<TransactionRepository>()),
   );
 
-  gitIt.registerLazySingleton<AddTransactionCubit>(
+  gitIt.registerFactory<AddTransactionCubit>(
     () => AddTransactionCubit(gitIt<CreateTransactionUseCase>()),
   );
 
@@ -58,10 +62,31 @@ void setupServer() {
     () => CategoriesCubit(gitIt<CreateTransactionUseCase>()),
   );
 
-
   gitIt.registerLazySingleton<TransactionRemoteDataSourceImpl>(
     () => TransactionRemoteDataSourceImpl(dio: gitIt<Dio>()),
-  ); 
+  );  
 
-  
+  gitIt.registerLazySingleton<GetTransactionByIdUseCase>(
+    () => GetTransactionByIdUseCase(gitIt<TransactionRepository>()),
+  );
+
+  gitIt.registerLazySingleton<GetTransactionsUseCase>(
+    () => GetTransactionsUseCase(gitIt<TransactionRepository>()),
+  );
+
+  gitIt.registerLazySingleton<DeleteTransactionUseCase>(
+    () => DeleteTransactionUseCase(gitIt<TransactionRepository>()),
+  );
+
+  gitIt.registerFactory<TransactionCubit>(
+    () => TransactionCubit(
+      gitIt<GetTransactionByIdUseCase>(),
+      gitIt<GetTransactionsUseCase>(),
+      gitIt<DeleteTransactionUseCase>(),
+      gitIt<CreateTransactionUseCase>(),
+    ),
+  );
+
+
+
 }

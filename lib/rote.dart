@@ -17,6 +17,7 @@ class RotePage extends StatefulWidget {
 
 class _RotePageState extends State<RotePage> {
   int battomIndex = 0;
+  int _transactionsRefreshKey = 0;
 
   // قائمة تحتوي على البيانات (الأيقونة + الاسم)
   final List<Map<String, dynamic>> navItems = [
@@ -24,18 +25,23 @@ class _RotePageState extends State<RotePage> {
     {'icon': Icons.swap_horiz_rounded, 'label': 'المعاملات'},
   ];
 
-  final List<Widget> pages = [const HomePage(), const TransactionPage()];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[battomIndex],
+      body: battomIndex == 0
+          ? const HomePage()
+          : TransactionPage(key: ValueKey(_transactionsRefreshKey)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.infoColor,
         elevation: 4,
         shape: const CircleBorder(),
-        onPressed: () {
-          context.push(AppRouter.addTransactionPage);
+        onPressed: () async {
+          final transactionAdded = await context.push<bool>(
+            AppRouter.addTransactionPage,
+          );
+          if (transactionAdded == true && mounted) {
+            setState(() => _transactionsRefreshKey++);
+          }
         },
         child: const Icon(Icons.add, size: 30, color: Colors.white),
       ),

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:my_wallet/core/constants/api_constants.dart';
 import 'package:my_wallet/features/transactions/data/datasources/transaction_datasource.dart';
 import 'package:my_wallet/features/transactions/data/models/category_model.dart';
+import 'package:my_wallet/features/transactions/data/models/get_transaction_model.dart';
 import 'package:my_wallet/features/transactions/data/models/trendaction_model.dart';
 
 class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
@@ -79,6 +80,66 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
   }
 
   @override
+  Future<List<TransactionModel>> getTransactions() async {
+    final response = await dio.get(
+      ApiConstants.getTransactions,
+      queryParameters: {'page': 1, 'limit': 100},
+    );
+    final responseData = response.data;
+
+    if (responseData is! Map || responseData['success'] != true) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        message: 'تعذر قراءة المعاملات من الخادم',
+      );
+    }
+
+    final data = responseData['data'];
+    final transactions = data is List
+        ? data
+        : data is Map
+        ? data['data'] ?? data['items'] ?? data['transactions']
+        : responseData['items'] ?? responseData['transactions'];
+
+    if (transactions is! List) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        message: 'تنسيق قائمة المعاملات غير صالح',
+      );
+    }
+
+    return transactions
+        .map(
+          (transaction) => TransactionModel.fromJson(
+            Map<String, dynamic>.from(transaction as Map),
+          ),
+        )
+        .toList();
+  }
+
+  @override
+  Future<void> deleteTransaction(String id) async {
+    final response = await dio.delete(
+      '${ApiConstants.deleteTransaction}/${Uri.encodeComponent(id)}',
+    );
+    final responseData = response.data;
+
+    if (responseData is Map &&
+        responseData.containsKey('success') &&
+        responseData['success'] != true) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        message: responseData['message'] is String
+            ? responseData['message'] as String
+            : 'تعذر حذف المعاملة',
+      );
+    }
+  }
+
+  @override
   Future<TransactionModel> createTransaction({
     required String type,
     required String categoryId,
@@ -129,5 +190,11 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
     } catch (e) {
       throw Exception('حدث خطأ في النظام : $e');
     }
+  }
+
+  @override
+  Future<GetTransactionModel> getTransactionById(String id) async {
+    final response = await dio.get('/transactions/$id');
+    return GetTransactionModel.fromJson(response.data);
   }
 }

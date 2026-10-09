@@ -7,6 +7,8 @@ class ApiConstants {
   static const String googleAuth = '/auth/google';
 
   // transactions
-  static const String createTransaction = '/transactions';
+  static const String createTransaction = '/transactions'; 
+  static const String deleteTransaction = '/transactions';
   static const String categories = '/categories';
+  static const String getTransactions = '/transactions';
 }

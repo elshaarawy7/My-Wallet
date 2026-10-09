@@ -24,7 +24,7 @@ class AppRouter {
   static const String addTransactionPage = '/addTransactionPage';
 
   static final GoRouter router = GoRouter(
-    initialLocation: rotePage,
+    initialLocation: loginPage,
     routes: [
       GoRoute(path: rotePage, builder: (context, state) => RotePage()),
 

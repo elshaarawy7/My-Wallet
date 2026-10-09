@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_wallet/features/transactions/domain/entity/usecase/transaction_usecase.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/categories_state.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/transaction_usecase.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/catogogry/categories_state.dart';
 
 class CategoriesCubit extends Cubit<CategoriesState> {
   final CreateTransactionUseCase transactionUseCase;

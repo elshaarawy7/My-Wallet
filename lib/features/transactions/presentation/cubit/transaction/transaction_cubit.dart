@@ -1,11 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_wallet/features/transactions/domain/entity/usecase/transaction_usecase.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/transaction_state.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/transaction_usecase.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/transaction/transaction_state.dart';
 
 class AddTransactionCubit extends Cubit<AddTransactionState> {
   final CreateTransactionUseCase createTransactionUseCase;
 
-  AddTransactionCubit(this.createTransactionUseCase) : super(AddTransactionInitial()); 
+  AddTransactionCubit(this.createTransactionUseCase)
+    : super(AddTransactionInitial());
 
   static AddTransactionCubit get(context) => BlocProvider.of(context);
 
@@ -19,6 +20,7 @@ class AddTransactionCubit extends Cubit<AddTransactionState> {
     required String description,
     required DateTime transactionDate,
   }) async {
+    if (isClosed) return;
     emit(AddTransactionLoading());
 
     final result = await createTransactionUseCase(
@@ -32,6 +34,7 @@ class AddTransactionCubit extends Cubit<AddTransactionState> {
       transactionDate: transactionDate,
     );
 
+    if (isClosed) return;
     result.fold(
       (failure) => emit(AddTransactionFailure(failure.message)),
       (transaction) => emit(AddTransactionSuccess(transaction)),

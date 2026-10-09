@@ -12,7 +12,9 @@ class CreateTransactionUseCase {
 
   Future<Either<Failure, List<CategoryModel>>> getCategories() {
     return repository.getCategories();
-  }
+  } 
+
+  
 
   Future<Either<Failure, TransactionEntity>> call({
     required String type,

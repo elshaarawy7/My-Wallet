@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:my_wallet/core/errors/fuiler.dart';
 import 'package:my_wallet/features/transactions/data/datasources/transaction_datasource.dart';
 import 'package:my_wallet/features/transactions/data/models/category_model.dart';
+import 'package:my_wallet/features/transactions/data/models/get_transaction_model.dart';
 import 'package:my_wallet/features/transactions/data/models/trendaction_model.dart';
 import 'package:my_wallet/features/transactions/domain/repositories/transactions_repo.dart';
 
@@ -21,9 +22,58 @@ class TransactionRepositoryImpl implements TransactionRepository {
           e.type == DioExceptionType.connectionError) {
         return const Left(NetworkFailure());
       }
-      return Left(ServerFailure(message: _extractErrorMessage(e.response?.data)));
+      return Left(
+        ServerFailure(message: _extractErrorMessage(e.response?.data)),
+      );
     } catch (e) {
       return Left(ServerFailure(message: 'تعذر تحميل التصنيفات: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TransactionModel>>> getTransactions() async {
+    try {
+      return Right(await remoteDataSource.getTransactions());
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.connectionError) {
+        return const Left(NetworkFailure());
+      }
+      return Left(
+        ServerFailure(
+          message: _extractErrorMessage(
+            e.response?.data,
+            fallbackMessage: e.message ?? 'تعذر تحميل المعاملات',
+          ),
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: 'تعذر تحميل المعاملات: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteTransaction(String id) async {
+    try {
+      await remoteDataSource.deleteTransaction(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.connectionError) {
+        return const Left(NetworkFailure());
+      }
+      return Left(
+        ServerFailure(
+          message: _extractErrorMessage(
+            e.response?.data,
+            fallbackMessage: e.message ?? 'تعذر حذف المعاملة',
+          ),
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: 'تعذر حذف المعاملة: $e'));
     }
   }
 
@@ -67,9 +117,10 @@ class TransactionRepositoryImpl implements TransactionRepository {
     }
   }
 
-  String _extractErrorMessage(dynamic responseData) {
-    const fallbackMessage = 'حدث خطأ أثناء إضافة المعاملة';
-
+  String _extractErrorMessage(
+    dynamic responseData, {
+    String fallbackMessage = 'حدث خطأ أثناء إضافة المعاملة',
+  }) {
     if (responseData is Map) {
       final error = responseData['error'];
       final validationErrors =
@@ -140,5 +191,24 @@ class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     return null;
+  }
+
+  @override
+  Future<Either<Failure, GetTransactionModel>> getTransactionById(
+    String id,
+  ) async {
+    try {
+      final result = await remoteDataSource.getTransactionById(id);
+      return Right(result);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return const Left(ServerFailure(message: 'المعاملة غير موجودة'));
+      } else if (e.response?.statusCode == 401) {
+        return const Left(ServerFailure(message: 'غير مصرح بالوصول'));
+      }
+      return Left(ServerFailure(message: e.message ?? 'حدث خطأ غير متوقع'));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
   }
 }

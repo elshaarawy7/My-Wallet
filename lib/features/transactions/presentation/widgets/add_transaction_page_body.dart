@@ -6,10 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/core/widgets/custem_text_from_filed.dart';
 import 'package:my_wallet/core/widgets/custom_batton.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/transaction_cubit.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/transaction_state.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/categories_cubit.dart';
-import 'package:my_wallet/features/transactions/presentation/cubit/categories_state.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/catogogry/categories_cubit.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/catogogry/categories_state.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/transaction/transaction_cubit.dart';
+import 'package:my_wallet/features/transactions/presentation/cubit/transaction/transaction_state.dart';
 
 class TransactionPageBody extends StatefulWidget {
   const TransactionPageBody({super.key});
@@ -64,7 +64,7 @@ class _TransactionPageBodyState extends State<TransactionPageBody> {
           amountController.clear();
           titleController.clear();
           descriptionController.clear();
-          GoRouter.of(context).go('/rotePage');
+          GoRouter.of(context).pop(true);
         }
       },
       builder: (context, state) {
@@ -112,7 +112,7 @@ class _TransactionPageBodyState extends State<TransactionPageBody> {
 
                     CustomTextField(
                       label: "اشتريت ايه ؟",
-                      hintText: "كيش شبسي ؟",
+                      hintText: ".....",
                       isPassword: false,
                       prefixIcon: Icons.textsms,
                       controller: titleController,
@@ -212,7 +212,7 @@ class _TransactionPageBodyState extends State<TransactionPageBody> {
                                   return;
                                 }
                                 await cubit.addTransaction(
-                                  type: "income",
+                                  type: "expense",
                                   categoryId: selectedCategoryId!,
                                   currencyCode: "EGP",
                                   amount: double.parse(amountController.text),
@@ -225,7 +225,8 @@ class _TransactionPageBodyState extends State<TransactionPageBody> {
                                 );
                               }
                             },
-                          ),
+                          ), 
+
                   ],
                 ),
               ),

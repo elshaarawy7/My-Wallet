@@ -1,20 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-enum TransactionType {
-  expense,
-  income;
-
-  factory TransactionType.fromString(String value) {
-    return TransactionType.values.firstWhere(
-      (e) => e.name.toLowerCase() == value.toLowerCase(),
-      orElse: () => TransactionType.expense,
-    );
-  }
-}
-
-class TransactionEntity extends Equatable {
+class GatTransactionEntity extends Equatable {
   final String id;
-  final TransactionType type;
+  final String type;
   final String categoryId;
   final String currencyCode;
   final double amount;
@@ -23,7 +11,7 @@ class TransactionEntity extends Equatable {
   final String description;
   final DateTime transactionDate;
 
-  const TransactionEntity({
+  const GatTransactionEntity({
     required this.id,
     required this.type,
     required this.categoryId,
@@ -46,7 +34,5 @@ class TransactionEntity extends Equatable {
         baseCurrencyAmount,
         description,
         transactionDate,
-      ]; 
-
-      
+      ];
 }

@@ -19,47 +19,23 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
   ///
   /// The API wraps its payload in `data` in some responses, while other
   /// responses expose it at the top level, so support both shapes here.
-  void _applyAccessToken(Map<String, dynamic> response) {
+  bool _applyAccessToken(Map<String, dynamic> response) {
     final payload = response['data'] is Map
         ? Map<String, dynamic>.from(response['data'] as Map)
         : response;
     final token = payload['accessToken'] ?? payload['access_token'];
-
-    if (token is String && token.trim().isNotEmpty) {
-      final accessToken = token.trim();
-      dio.options.headers['Authorization'] =
-          accessToken.toLowerCase().startsWith('bearer ')
-          ? accessToken
-          : 'Bearer $accessToken';
+    if (token is! String || token.trim().isEmpty) {
+      dio.options.headers.remove('Authorization');
+      return false;
     }
-  }
 
-  void _applyBearerAuthorization(Map<String, dynamic> response) {
-    final payload = response['data'] is Map
-        ? Map<String, dynamic>.from(response['data'] as Map)
-        : response;
-    final token = payload['accessToken'] ?? payload['access_token'];
-    if (token is String && token.trim().isNotEmpty) {
-      final accessToken = token.trim();
-      dio.options.headers['Authorization'] =
-          accessToken.toLowerCase().startsWith('bearer ')
-          ? accessToken
-          : 'Bearer $accessToken';
-    }
-  }
-
-  void _setAuthorizationFromResponse(Map<String, dynamic> response) {
-    final payload = response['data'] is Map
-        ? Map<String, dynamic>.from(response['data'] as Map)
-        : response;
-    final token = payload['accessToken'] ?? payload['access_token'];
-    if (token is String && token.trim().isNotEmpty) {
-      final value = token.trim();
-      dio.options.headers['Authorization'] =
-          value.toLowerCase().startsWith('bearer ')
-          ? value
-          : <String>['Bearer ', value].join();
-    }
+    final value = token.trim();
+    dio.options.headers['Authorization'] = value.toLowerCase().startsWith(
+      'bearer ',
+    )
+        ? value
+        : 'Bearer $value';
+    return true;
   }
 
   String _translateErrorMessage(String rawMessage) {
@@ -135,9 +111,11 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
       final userData = data['data'] is Map<String, dynamic>
           ? data['data'] as Map<String, dynamic>
           : data;
-      _applyAccessToken(data);
-      _applyBearerAuthorization(data);
-      _setAuthorizationFromResponse(data);
+      if (!_applyAccessToken(data)) {
+        return left(
+          const ServerFailure(message: 'لم يرجع الخادم رمز الدخول، حاول تسجيل الدخول مرة أخرى'),
+        );
+      }
       return right(LoginModel.fromJson(userData));
     } catch (e) {
       if (e is DioException) {
@@ -174,9 +152,11 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
       final userData = data['data'] is Map<String, dynamic>
           ? data['data'] as Map<String, dynamic>
           : data;
-      _applyAccessToken(data);
-      _applyBearerAuthorization(data);
-      _setAuthorizationFromResponse(data);
+      if (!_applyAccessToken(data)) {
+        return left(
+          const ServerFailure(message: 'لم يرجع الخادم رمز الدخول، حاول تسجيل الدخول مرة أخرى'),
+        );
+      }
       return right(RegesterModel.fromJson(userData));
     } catch (e) {
       if (e is DioException) {
@@ -225,15 +205,11 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
       final data = res.data as Map<String, dynamic>;
 
       final loginResponse = LoginResponseModel.fromJson(data);
-      if (loginResponse.accessToken.isNotEmpty) {
-        final accessToken = loginResponse.accessToken.trim();
-        dio.options.headers['Authorization'] =
-            accessToken.toLowerCase().startsWith('bearer ')
-            ? accessToken
-            : 'Bearer $accessToken';
+      if (!_applyAccessToken(data)) {
+        return left(
+          const ServerFailure(message: 'لم يرجع الخادم رمز الدخول، حاول تسجيل الدخول مرة أخرى'),
+        );
       }
-      _applyBearerAuthorization(data);
-      _setAuthorizationFromResponse(data);
       return right(loginResponse);
     } catch (e) {
       if (e is DioException) {
