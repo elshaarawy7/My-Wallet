@@ -14,6 +14,7 @@ import 'package:my_wallet/features/transactions/domain/repositories/transactions
 import 'package:my_wallet/features/transactions/domain/usecase/get_transaction_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/get_transactions_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/delete_transaction_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/get_categories_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/transaction_usecase.dart';
 import 'package:my_wallet/features/transactions/presentation/cubit/catogogry/categories_cubit.dart';
 import 'package:my_wallet/features/transactions/presentation/cubit/get_transaction/get_transaction_cubit.dart';
@@ -54,12 +55,16 @@ void setupServer() {
     () => CreateTransactionUseCase(gitIt<TransactionRepository>()),
   );
 
+  gitIt.registerLazySingleton<GetCategoriesUseCase>(
+    () => GetCategoriesUseCase(gitIt<TransactionRepository>()),
+  );
+
   gitIt.registerFactory<AddTransactionCubit>(
     () => AddTransactionCubit(gitIt<CreateTransactionUseCase>()),
   );
 
   gitIt.registerFactory<CategoriesCubit>(
-    () => CategoriesCubit(gitIt<CreateTransactionUseCase>()),
+    () => CategoriesCubit(gitIt<GetCategoriesUseCase>()),
   );
 
   gitIt.registerLazySingleton<TransactionRemoteDataSourceImpl>(
@@ -83,7 +88,7 @@ void setupServer() {
       gitIt<GetTransactionByIdUseCase>(),
       gitIt<GetTransactionsUseCase>(),
       gitIt<DeleteTransactionUseCase>(),
-      gitIt<CreateTransactionUseCase>(),
+      gitIt<GetCategoriesUseCase>(),
     ),
   );
 

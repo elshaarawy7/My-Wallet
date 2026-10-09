@@ -2,11 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:my_wallet/core/errors/fuiler.dart';
 import 'package:my_wallet/features/transactions/data/models/get_transaction_model.dart';
 import 'package:my_wallet/features/transactions/data/models/trendaction_model.dart';
-import 'package:my_wallet/features/transactions/data/models/category_model.dart';
+import 'package:my_wallet/features/transactions/domain/entity/category_entity.dart';
 
 
 abstract class TransactionRepository {
-  Future<Either<Failure, List<CategoryModel>>> getCategories();
+  Future<Either<Failure, List<CategoryEntity>>> getCategories();
 
   Future<Either<Failure, List<TransactionModel>>> getTransactions();
 

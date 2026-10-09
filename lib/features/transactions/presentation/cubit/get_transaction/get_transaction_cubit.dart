@@ -1,21 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/delete_transaction_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/get_categories_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/get_transaction_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/get_transactions_use_case.dart';
-import 'package:my_wallet/features/transactions/domain/usecase/transaction_usecase.dart';
 import 'package:my_wallet/features/transactions/presentation/cubit/get_transaction/get_transaction_state.dart';
 
 class TransactionCubit extends Cubit<TransactionState> {
   final GetTransactionByIdUseCase getTransactionByIdUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
   final DeleteTransactionUseCase deleteTransactionUseCase;
-  final CreateTransactionUseCase createTransactionUseCase;
+  final GetCategoriesUseCase getCategoriesUseCase;
 
   TransactionCubit(
     this.getTransactionByIdUseCase,
     this.getTransactionsUseCase,
     this.deleteTransactionUseCase,
-    this.createTransactionUseCase,
+    this.getCategoriesUseCase,
   ) : super(TransactionInitial());
 
   static TransactionCubit get(context) => BlocProvider.of(context);
@@ -36,7 +36,7 @@ class TransactionCubit extends Cubit<TransactionState> {
           second.transactionDate.compareTo(first.transactionDate),
     );
 
-    final categoriesResult = await createTransactionUseCase.getCategories();
+    final categoriesResult = await getCategoriesUseCase();
     String? categoryErrorMessage;
     final categoriesById = categoriesResult.fold(
       (failure) {

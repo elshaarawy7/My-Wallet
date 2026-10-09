@@ -1,8 +1,7 @@
-class CategoryModel {
-  final String id;
-  final String name;
+import 'package:my_wallet/features/transactions/domain/entity/category_entity.dart';
 
-  const CategoryModel({required this.id, required this.name});
+class CategoryModel extends CategoryEntity {
+  const CategoryModel({required super.id, required super.name});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(

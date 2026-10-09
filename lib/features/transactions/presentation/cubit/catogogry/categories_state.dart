@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:my_wallet/features/transactions/data/models/category_model.dart';
+import 'package:my_wallet/features/transactions/domain/entity/category_entity.dart';
 
 abstract class CategoriesState extends Equatable {
   const CategoriesState();
@@ -13,7 +13,7 @@ class CategoriesInitial extends CategoriesState {}
 class CategoriesLoading extends CategoriesState {}
 
 class CategoriesLoaded extends CategoriesState {
-  final List<CategoryModel> categories;
+  final List<CategoryEntity> categories;
 
   const CategoriesLoaded(this.categories);
 

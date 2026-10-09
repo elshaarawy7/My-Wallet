@@ -46,12 +46,12 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
       ('مواصلات', 'directions-car', '#42A5F5'),
       ('مشتريات', 'shopping-cart', '#AB47BC'),
       ('فواتير', 'receipt', '#FFA726'),
-      ('راتب', 'payments', '#66BB6A'),
-      ('دخل إضافي', 'account-balance-wallet', '#26A69A'),
+      ('أخرى', 'more-horiz', '#78909C'),
     ];
-    final existingNames = categories.map((category) => category.name).toSet();
     for (final (name, icon, color) in defaults) {
-      if (existingNames.contains(name)) {
+      if (categories.any(
+        (category) => _normalizeCategoryName(category.name) == name,
+      )) {
         continue;
       }
 
@@ -77,6 +77,17 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
     }
 
     return categories;
+  }
+
+  String _normalizeCategoryName(String name) {
+    final normalizedName = name
+        .replaceAll(RegExp(r'[\u064B-\u065F\u0670]'), '')
+        .toLowerCase()
+        .trim();
+    if (normalizedName == 'اخرى' || normalizedName == 'other') {
+      return 'أخرى';
+    }
+    return normalizedName;
   }
 
   @override

@@ -10,5 +10,9 @@ class ApiConstants {
   static const String createTransaction = '/transactions'; 
   static const String deleteTransaction = '/transactions';
   static const String categories = '/categories';
-  static const String getTransactions = '/transactions';
+  static const String getTransactions = '/transactions'; 
+
+  // raning transactions 
+
+  static const String recurringTransactions = '/recurring-transactions';
 }

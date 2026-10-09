@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:my_wallet/core/errors/fuiler.dart';
 import 'package:my_wallet/features/transactions/data/datasources/transaction_datasource.dart';
-import 'package:my_wallet/features/transactions/data/models/category_model.dart';
 import 'package:my_wallet/features/transactions/data/models/get_transaction_model.dart';
 import 'package:my_wallet/features/transactions/data/models/trendaction_model.dart';
 import 'package:my_wallet/features/transactions/domain/repositories/transactions_repo.dart';
+import 'package:my_wallet/features/transactions/domain/entity/category_entity.dart';
 
 class TransactionRepositoryImpl implements TransactionRepository {
   final TransactionRemoteDataSource remoteDataSource;
@@ -13,7 +13,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   TransactionRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<CategoryModel>>> getCategories() async {
+  Future<Either<Failure, List<CategoryEntity>>> getCategories() async {
     try {
       return Right(await remoteDataSource.getCategories());
     } on DioException catch (e) {
