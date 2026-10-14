@@ -46,12 +46,22 @@ class TransactionsLoaded extends TransactionState {
     this.categoryErrorMessage,
   });
 
+  double get totalIncomeBaseCurrencyAmount => transactions
+      .where((transaction) => transaction.type == TransactionType.income)
+      .fold(
+        0,
+        (total, transaction) => total + transaction.baseCurrencyAmount,
+      );
+
   double get totalExpenseBaseCurrencyAmount => transactions
       .where((transaction) => transaction.type == TransactionType.expense)
       .fold(
         0,
         (total, transaction) => total + transaction.baseCurrencyAmount,
       );
+
+  double get availableBalance =>
+      totalIncomeBaseCurrencyAmount - totalExpenseBaseCurrencyAmount;
 
   @override
   List<Object?> get props => [transactions, categoriesById, categoryErrorMessage];

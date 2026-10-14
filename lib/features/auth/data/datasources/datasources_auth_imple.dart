@@ -157,7 +157,18 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
           const ServerFailure(message: 'لم يرجع الخادم رمز الدخول، حاول تسجيل الدخول مرة أخرى'),
         );
       }
-      return right(RegesterModel.fromJson(userData));
+      final registerModel = RegesterModel.fromJson(userData);
+      return right(
+        registerModel.name == null
+            ? RegesterModel(
+                name: name,
+                email: registerModel.email ?? email,
+                password: registerModel.password ?? password,
+                confirmPassword:
+                    registerModel.confirmPassword ?? confirmPassword,
+              )
+            : registerModel,
+      );
     } catch (e) {
       if (e is DioException) {
         return left(ServerFailure(message: _extractErrorMessage(e)));
@@ -204,13 +215,39 @@ class DatasourcesAuthImple implements DatasourcesAuhe {
 
       final data = res.data as Map<String, dynamic>;
 
-      final loginResponse = LoginResponseModel.fromJson(data);
+      final response = LoginResponseModel.fromJson(data);
+      final loginResponse = LoginResponseModel(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        name: response.name ?? account.displayName,
+      );
       if (!_applyAccessToken(data)) {
         return left(
           const ServerFailure(message: 'لم يرجع الخادم رمز الدخول، حاول تسجيل الدخول مرة أخرى'),
         );
       }
       return right(loginResponse);
+    } catch (e) {
+      if (e is DioException) {
+        return left(ServerFailure(message: _extractErrorMessage(e)));
+      }
+      return left(ServerFailure(message: "حدث خطأ غير متوقع: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> logout() async {
+    try {
+      final res = await dio.post(ApiConstants.logout);
+      if (res.statusCode == 200) {
+        // Clear the access token from Dio headers
+        dio.options.headers.remove('Authorization');
+        return right(null);
+      } else {
+        return left(
+          ServerFailure(message: "حدث خطأ غير متوقع: ${res.statusCode}"),
+        );
+      }
     } catch (e) {
       if (e is DioException) {
         return left(ServerFailure(message: _extractErrorMessage(e)));

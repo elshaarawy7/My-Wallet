@@ -36,7 +36,10 @@ class _RegisterPageBodyState extends State<RegisterPageBody> {
             toastPosition: Position.bottom,
             toastDuration: Duration(seconds: 2),
           ).show(context);
-          context.go(AppRouter.rotePage);
+          context.go(
+            AppRouter.rotePage,
+            extra: state.regesterEntity.name,
+          );
         }
 
         if (state is RegesterErorr) {

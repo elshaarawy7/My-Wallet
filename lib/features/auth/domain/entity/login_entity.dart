@@ -1,6 +1,7 @@
 class LoginEntity {
+  final String? name;
   final String? email;
   final String? password;
 
-  LoginEntity({this.email, this.password});
+  LoginEntity({this.name, this.email, this.password});
 }

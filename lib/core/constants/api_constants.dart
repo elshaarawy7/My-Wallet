@@ -4,7 +4,8 @@ class ApiConstants {
   // auth
   static const String login = '/auth/login';
   static const String regester = '/auth/signup';
-  static const String googleAuth = '/auth/google';
+  static const String googleAuth = '/auth/google'; 
+  static const String logout = '/auth/logout';
 
   // transactions
   static const String createTransaction = '/transactions'; 

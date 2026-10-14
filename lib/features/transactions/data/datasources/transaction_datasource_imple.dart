@@ -46,6 +46,7 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
       ('مواصلات', 'directions-car', '#42A5F5'),
       ('مشتريات', 'shopping-cart', '#AB47BC'),
       ('فواتير', 'receipt', '#FFA726'),
+      ('راتب', 'payments', '#4CAF50'),
       ('أخرى', 'more-horiz', '#78909C'),
     ];
     for (final (name, icon, color) in defaults) {

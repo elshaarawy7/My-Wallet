@@ -7,14 +7,15 @@ import 'package:my_wallet/features/auth/data/repositories/auth_repo_imple.dart';
 import 'package:my_wallet/features/auth/domain/repositories/auth_repo.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/google/googole_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_cubit.dart';
+import 'package:my_wallet/features/auth/presentation/cubit/logout/logout_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/regester/regester_cubit.dart';
 import 'package:my_wallet/features/transactions/data/datasources/transaction_datasource_imple.dart';
 import 'package:my_wallet/features/transactions/data/repositories/transactions_repo_imple.dart';
 import 'package:my_wallet/features/transactions/domain/repositories/transactions_repo.dart';
-import 'package:my_wallet/features/transactions/domain/usecase/get_transaction_use_case.dart';
-import 'package:my_wallet/features/transactions/domain/usecase/get_transactions_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/delete_transaction_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/get_categories_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/get_transaction_use_case.dart';
+import 'package:my_wallet/features/transactions/domain/usecase/get_transactions_use_case.dart';
 import 'package:my_wallet/features/transactions/domain/usecase/transaction_usecase.dart';
 import 'package:my_wallet/features/transactions/presentation/cubit/catogogry/categories_cubit.dart';
 import 'package:my_wallet/features/transactions/presentation/cubit/get_transaction/get_transaction_cubit.dart';
@@ -32,9 +33,7 @@ void setupServer() {
   gitIt.registerLazySingleton<AuthRepo>(
     () => AuthRepoImple(gitIt<DatasourcesAuthImple>()),
   );
-  gitIt.registerLazySingleton<LoginCubit>(
-    () => LoginCubit(gitIt<AuthRepo>()),
-  );
+  gitIt.registerLazySingleton<LoginCubit>(() => LoginCubit(gitIt<AuthRepo>()));
 
   gitIt.registerLazySingleton<RegesterCubit>(
     () => RegesterCubit(gitIt<AuthRepo>()),
@@ -43,6 +42,8 @@ void setupServer() {
   gitIt.registerLazySingleton<GoogoleCubit>(
     () => GoogoleCubit(gitIt<AuthRepo>()),
   );
+
+  gitIt.registerFactory<LogoutCubit>(() => LogoutCubit());
 
   // Transactions
   gitIt.registerLazySingleton<TransactionRepository>(
@@ -69,7 +70,7 @@ void setupServer() {
 
   gitIt.registerLazySingleton<TransactionRemoteDataSourceImpl>(
     () => TransactionRemoteDataSourceImpl(dio: gitIt<Dio>()),
-  );  
+  );
 
   gitIt.registerLazySingleton<GetTransactionByIdUseCase>(
     () => GetTransactionByIdUseCase(gitIt<TransactionRepository>()),
@@ -91,7 +92,4 @@ void setupServer() {
       gitIt<GetCategoriesUseCase>(),
     ),
   );
-
-
-
 }

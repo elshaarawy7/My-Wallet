@@ -1,7 +1,6 @@
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_wallet/core/router/app_router.dart';
@@ -18,30 +17,25 @@ class GoogleButton extends StatelessWidget {
     return BlocConsumer<GoogoleCubit, GoogoleState>(
       listener: (context, state) {
         if (state is GoogleAuthError) {
-          CherryToast.error(
-            title: const Text("خطأ", style: TextStyle(color: Colors.white)),
-            description: Text(state.message, selectionColor: Colors.white),
-            backgroundColor: AppColors.errorColor,
-            toastPosition: Position.bottom,
-            toastDuration: Duration(seconds: 2),
-          ).show(context);
+          Fluttertoast.showToast(
+            msg: "Google login failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
         }
 
         if (state is GoogleAuthSucsess) {
-          CherryToast.success(
-            title: const Text(
-              "تم بنجاح",
-              style: TextStyle(color: Colors.white),
-            ),
-            description: const Text(
-              "تم تسجيل الدخول بنجاح",
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: AppColors.successColor,
-            toastPosition: Position.bottom,
-            toastDuration: Duration(seconds: 2),
-          ).show(context);
-          context.go(AppRouter.rotePage);
+           
+           Fluttertoast.showToast(
+            msg: "Google login successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+          );
+          context.go(AppRouter.rotePage, extra: state.loginResponseModel.name);
         }
       },
       builder: (context, state) {

@@ -42,4 +42,9 @@ class AuthRepoImple implements AuthRepo {
      
 
   }
+
+  @override
+  Future<Either<Failure, void>> logout() {
+    return datasourcesAuthImple.logout();    
+  }
 }

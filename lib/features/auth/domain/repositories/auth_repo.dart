@@ -22,4 +22,6 @@ abstract class AuthRepo {
   Future<Either<Failure, LoginResponseModel>> googleAuth({
     required String idToken,  
   });  
+
+  Future<Either<Failure, void>> logout(); 
 }

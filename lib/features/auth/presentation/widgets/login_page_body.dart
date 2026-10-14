@@ -2,19 +2,17 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_wallet/core/router/app_router.dart';
 import 'package:my_wallet/core/theme/app_color.dart';
 import 'package:my_wallet/core/utils/app_images.dart';
 import 'package:my_wallet/core/utils/validators.dart';
+import 'package:my_wallet/core/widgets/custem_text_from_filed.dart';
 import 'package:my_wallet/core/widgets/custom_batton.dart';
-import 'package:my_wallet/features/auth/data/datasources/datasources_auth_imple.dart';
-import 'package:my_wallet/features/auth/data/repositories/auth_repo_imple.dart';
-import 'package:my_wallet/features/auth/presentation/cubit/google/googole_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:my_wallet/features/auth/presentation/cubit/login/login_state.dart';
-import 'package:my_wallet/core/widgets/custem_text_from_filed.dart';
 import 'package:my_wallet/features/auth/presentation/widgets/google_batton.dart';
 import 'package:my_wallet/features/auth/presentation/widgets/no_acount.dart';
 
@@ -35,34 +33,28 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginError) {
-          CherryToast.error(
-            title: const Text("خطأ", style: TextStyle(color: Colors.white)),
-            description: Text(
-              state.failure.message,
-              selectionColor: Colors.white,
-            ),
-            backgroundColor: AppColors.errorColor,
-            toastPosition: Position.bottom,
-            toastDuration: Duration(seconds: 1),
-          ).show(context);
+          Fluttertoast.showToast(
+            msg: "Login failed: ${state.failure.message}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
         }
 
         if (state is LoginSucsess) {
-          CherryToast.success(
-            title: const Text(
-              "تم بنجاح",
-              style: TextStyle(color: Colors.white),
-            ),
-            description: const Text(
-              "تم تسجيل الدخول بنجاح",
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: AppColors.successColor,
-            toastPosition: Position.bottom,
-            toastDuration: Duration(seconds: 2),
-          ).show(context);
+          Fluttertoast.showToast(
+            msg: "تم تسجيل الدخول بنجاح",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+          );
 
-          context.go(AppRouter.rotePage);
+          final userName = state.loginModel.name?.trim().isNotEmpty == true
+              ? state.loginModel.name!.trim()
+              : state.loginModel.email?.split('@').first;
+          context.go(AppRouter.rotePage, extra: userName);
         }
       },
       builder: (context, state) {
@@ -219,10 +211,9 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                       ],
                     ),
 
-                    Gap(10), 
+                    Gap(10),
 
                     GoogleButton(),
-                   
 
                     Gap(10),
 

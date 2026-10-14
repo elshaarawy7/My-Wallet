@@ -26,7 +26,11 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: loginPage,
     routes: [
-      GoRoute(path: rotePage, builder: (context, state) => RotePage()),
+      GoRoute(
+        path: rotePage,
+        builder: (context, state) =>
+            RotePage(userName: state.extra as String?),
+      ),
 
       GoRoute(path: splashPage, builder: (context, state) => SplashPage()),
 
@@ -34,7 +38,11 @@ class AppRouter {
 
       GoRoute(path: regesterPage, builder: (context, state) => RegesterPage()),
 
-      GoRoute(path: homePage, builder: (context, state) => HomePage()),
+      GoRoute(
+        path: homePage,
+        builder: (context, state) =>
+            HomePage(userName: state.extra as String?),
+      ),
 
       GoRoute(
         path: forgetPassowrdPage,

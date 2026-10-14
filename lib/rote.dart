@@ -7,7 +7,9 @@ import 'package:my_wallet/features/home/presentation/pages/home_page.dart';
 import 'package:my_wallet/features/transactions/presentation/pages/transaction_page.dart';
 
 class RotePage extends StatefulWidget {
-  const RotePage({super.key});
+  final String? userName;
+
+  const RotePage({super.key, this.userName});
 
   static const String routeName = '/rotePage';
 
@@ -29,7 +31,7 @@ class _RotePageState extends State<RotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: battomIndex == 0
-          ? const HomePage()
+          ? HomePage(userName: widget.userName)
           : TransactionPage(key: ValueKey(_transactionsRefreshKey)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.infoColor,
